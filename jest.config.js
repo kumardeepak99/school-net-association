@@ -8,7 +8,37 @@ const createJestConfig = nextJest({
 const customJestConfig = {
   // Add more setup options before each test is run
   setupFilesAfterEnv: ["<rootDir>/jest.setup.js"],
-  testEnvironment: "jest-environment-jsdom",
+  projects: [
+    {
+      preset: "ts-jest",
+      displayName: "frontend",
+      testEnvironment: "jest-environment-jsdom",
+      setupFilesAfterEnv: ["<rootDir>/jest.setup.js"],
+      testMatch: ["<rootDir>/src/app/__tests__/pages/**/*.test.tsx", "<rootDir>/src/app/__tests__/components/**/*.test.tsx"],
+      moduleNameMapper: {
+        "^@/(.*)$": "<rootDir>/src/$1",
+      },
+      globals: {
+        "ts-jest": {
+          tsconfig: "tsconfig.test.json",
+        },
+      },
+    },
+    {
+      preset: "ts-jest",
+      displayName: "backend",
+      testEnvironment: "node",
+      setupFilesAfterEnv: ["<rootDir>/jest.setup.js"],
+      testMatch: ["<rootDir>/src/app/__tests__/api/**/*.test.ts"],
+      moduleNameMapper: {
+        "^@/(.*)$": "<rootDir>/src/$1",
+      },
+    },
+  ],
+  transform: {
+    "^.+\\.tsx?$": "ts-jest",
+  },
+  //ignore test files
   testPathIgnorePatterns: ["__tests__/__fixtures__"],
 };
 
